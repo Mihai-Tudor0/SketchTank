@@ -1,4 +1,16 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# SketchTank
+
+Un joc 2D simulator și sandbox de acvariu în C++, în care îți desenezi propriii pești și propriile decorațiuni și îi urmărești prinzând viață.
+
+### Despre proiect
+
+- **Magazin & Desenare la prima deblocare:** Cu monedele câștigate în joc cumperi tipuri de decorațiuni (iarbă de mare, corali, comori de acvariu) și specii de pești (ex. peștișor auriu) sau animale acvatice. La prima achiziție a unui tip nou îl desenezi chiar tu.
+- **Variante salvate, redimensionare și recolorare:** Pentru decorațiuni și creaturi poți salva până la 3 variante de desen pe care să le refolosești ulterior; ca să nu arate identic, le poți **redimensiona** și le poți **schimba paleta de culori** păstrând desenul de bază.
+- **Colecție permanentă de desene:** Desenele preferate pot fi salvate într-un folder dedicat ca să nu le pierzi și să le poți reîncărca oricând în acvariu.
+- **Îngrijire & Progresie:** Peștii trebuie hrăniți, iar la început acvariul trebuie curățat manual. Pe măsură ce avansezi în nivel deblochezi crustacee / creveți și alte animale acvatice (ex. limacși de mare) care ajută la curățarea automată a acvariului, plus opțiuni de customizare (bule, surse de lumină).
+- **Inspirație:** Tema principală (acvariu populat cu creaturi desenate de jucător) este inspirată de *Drawquarium*, extinsă cu propriul sistem de progresie, magazin, variante reutilizabile și personalizare (într-un spirit jucăuș gen *„Fish, Draw & Grow”*).
+
+---
 
 ### Folosiți template-ul corespunzător grupei voastre!
 
@@ -33,8 +45,8 @@ O cerință nu se consideră îndeplinită dacă este realizată doar prin cod g
 
 ### Tema 0
 
-- [ ] Nume proiect (poate fi schimbat ulterior)
-- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
+- [x] Nume proiect (poate fi schimbat ulterior)
+- [x] Scurtă descriere a temei alese, ce v-ați propus să implementați
 
 ## Tema 1
 
@@ -206,4 +218,5 @@ The [template repository](https://github.com/mcmarius/oop-template) itself is li
 
 ## Resurse
 
+- Inspirație tematică: [Drawquarium — Official Release Date Trailer](https://www.youtube.com/watch?v=xqkNEx5z8SI)
 - adăugați trimiteri **detaliate** către resursele externe care v-au ajutat sau pe care le-ați folosit
