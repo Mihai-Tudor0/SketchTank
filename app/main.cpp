@@ -1,54 +1,110 @@
+#include <cstddef>
 #include <iostream>
-#include <array>
-#include "Example.h"
+#include <string>
+#include <vector>
+
+#include "Aquarium.h"
+
+namespace {
+
+int readChoice(const std::string& prompt) {
+    std::cout << prompt;
+    int value = 0;
+    if (!(std::cin >> value)) {
+        return -1;
+    }
+    return value;
+}
+
+void runShopAndPlace(Aquarium& tank, const std::vector<PixelCanvas>& sketches) {
+    const auto itemIds = tank.catalogItemIds();
+    std::cout << "\n--- Magazin SketchTank (Monede: " << tank.coins()
+              << ", Nivel: " << tank.level() << ", XP: " << tank.xp()
+              << ", Creaturi: " << tank.inhabitantCount() << ") ---\n";
+    for (std::size_t i = 0; i < itemIds.size(); ++i) {
+        std::cout << (i + 1) << ". " << tank.blueprintById(itemIds[i]) << '\n';
+    }
+    const int itemIdx = readChoice("Alege obiect (1-" + std::to_string(itemIds.size()) + "): ") - 1;
+    if (itemIdx < 0 || static_cast<std::size_t>(itemIdx) >= itemIds.size()) {
+        std::cout << "Selectie invalida.\n";
+        return;
+    }
+
+    const std::string& itemId = itemIds[static_cast<std::size_t>(itemIdx)];
+    if (!tank.blueprintById(itemId).isUnlocked()) {
+        if (!tank.canUnlockItem(itemId)) {
+            std::cout << "Monede sau nivel insuficient.\n";
+            return;
+        }
+        if (sketches.empty() || static_cast<std::size_t>(itemIdx) >= sketches.size()) {
+            std::cout << "Schita indisponibila.\n";
+            return;
+        }
+        PixelCanvas chosenSketch = sketches[0];
+        chosenSketch = sketches[static_cast<std::size_t>(itemIdx)];
+        std::cout << "Schita deblocata (copia #" << chosenSketch.copyGeneration() << ").\n";
+        tank.unlockItem(itemId, chosenSketch);
+    }
+
+    const auto palettes = tank.paletteIds();
+    std::cout << "\nAlege paleta de culori:\n";
+    for (std::size_t i = 0; i < palettes.size(); ++i) {
+        std::cout << (i + 1) << ". " << tank.paletteById(palettes[i]) << '\n';
+    }
+    const int palIdx = readChoice("Paleta (1-" + std::to_string(palettes.size()) + "): ") - 1;
+    if (palIdx < 0 || static_cast<std::size_t>(palIdx) >= palettes.size()) {
+        std::cout << "Paleta invalida.\n";
+        return;
+    }
+
+    std::cout << "Nume creatura/decor (- pentru automat): ";
+    std::string nickname;
+    std::cin >> nickname;
+    if (nickname == "-") {
+        nickname.clear();
+    }
+
+    const std::string& paletteId = palettes[static_cast<std::size_t>(palIdx)];
+    if (tank.placeItem(itemId, paletteId, nickname)) {
+        std::cout << "Adaugat in acvariu cu paleta " << tank.paletteById(paletteId).name() << "!\n"
+                  << tank.renderTankScene();
+    }
+}
+
+}  // namespace
 
 int main() {
-    std::cout << "Hello, world!\n";
-    Example e1;
-    e1.add(3);
-    e1.g();
-    std::array<int, 100> v{};
-    int nr;
-    std::cout << "Introduceți nr: ";
-    /////////////////////////////////////////////////////////////////////////
-    /// Observație: dacă aveți nevoie să citiți date de intrare de la tastatură,
-    /// dați exemple de date de intrare folosind fișierul tastatura.txt
-    /// Trebuie să aveți în fișierul tastatura.txt suficiente date de intrare
-    /// (în formatul impus de voi) astfel încât execuția programului să se încheie.
-    /// De asemenea, trebuie să adăugați în acest fișier date de intrare
-    /// pentru cât mai multe ramuri de execuție.
-    /// Dorim să facem acest lucru pentru a automatiza testarea codului, fără să
-    /// mai pierdem timp de fiecare dată să introducem de la zero aceleași date de intrare.
-    ///
-    /// Pe GitHub Actions (bife), fișierul tastatura.txt este folosit
-    /// pentru a simula date introduse de la tastatură.
-    /// Bifele verifică dacă programul are erori de compilare, erori de memorie și memory leaks.
-    ///
-    /// Dacă nu puneți în tastatura.txt suficiente date de intrare, îmi rezerv dreptul să vă
-    /// testez codul cu ce date de intrare am chef și să nu pun notă dacă găsesc vreun bug.
-    /// Impun această cerință ca să învățați să faceți un demo și să arătați părțile din
-    /// program care merg (și să le evitați pe cele care nu merg).
-    ///
-    /////////////////////////////////////////////////////////////////////////
-    std::cin >> nr;
-    /////////////////////////////////////////////////////////////////////////
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "v[" << i << "] = ";
-        std::cin >> v[i];
+    try {
+        Aquarium tank = Aquarium::loadFromCatalogFile("assets/catalog.json");
+        const std::vector<PixelCanvas> sketches = tank.loadStarterSketches("assets/starter_sketches.json");
+
+        std::cout << "=== SketchTank Demo (M1) ===\n" << tank.renderTankScene();
+        while (true) {
+            std::cout << "\n1. Acvariu  2. Magazin & Plasare  3. Hraneste  4. Curata  5. Pas urmator  6. Stare completa  0. Iesire\n";
+            const int option = readChoice("Optiune: ");
+            if (option <= 0) {
+                break;
+            }
+            if (option == 1) {
+                std::cout << tank.renderTankScene();
+            } else if (option == 2) {
+                runShopAndPlace(tank, sketches);
+            } else if (option == 3) {
+                const int earned = tank.simulateStep(true, false);
+                std::cout << "Pestii au fost hraniti (+" << earned << " monede).\n" << tank.renderTankScene();
+            } else if (option == 4) {
+                const int earned = tank.simulateStep(false, true);
+                std::cout << "Acvariul a fost curatat (+" << earned << " monede).\n" << tank.renderTankScene();
+            } else if (option == 5) {
+                const int earned = tank.simulateStep(false, false);
+                std::cout << "A trecut 1 pas (+" << earned << " monede).\n" << tank.renderTankScene();
+            } else if (option == 6) {
+                std::cout << tank;
+            }
+        }
+        return 0;
+    } catch (const std::exception& ex) {
+        std::cerr << "Eroare: " << ex.what() << '\n';
+        return 1;
     }
-    std::cout << "\n\n";
-    std::cout << "Am citit de la tastatură " << nr << " elemente:\n";
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "- " << v[i] << "\n";
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    /// Pentru date citite din fișier, NU folosiți tastatura.txt. Creați-vă voi
-    /// alt fișier propriu cu ce alt nume doriți.
-    /// Exemplu:
-    /// std::ifstream fis("date.txt");
-    /// for(int i = 0; i < nr2; ++i)
-    ///     fis >> v2[i];
-    ///
-    ///////////////////////////////////////////////////////////////////////////
-    return 0;
 }

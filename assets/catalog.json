@@ -1,0 +1,82 @@
+{
+  "tank": {
+    "name": "SketchTank",
+    "width": 38,
+    "height": 14,
+    "startingCoins": 30,
+    "startingCleanliness": 100,
+    "startingFood": 3
+  },
+  "palettes": [
+    {
+      "id": "golden_reef",
+      "name": "Golden Reef",
+      "hexColors": ["#FFD166", "#F77F00", "#FFFFFF", "#1D3557"],
+      "asciiSymbols": ["@", "#", "o", "*"]
+    },
+    {
+      "id": "coral_sunset",
+      "name": "Coral Sunset",
+      "hexColors": ["#FF6B6B", "#FF9F1C", "#FFE66D", "#6A4C93"],
+      "asciiSymbols": ["%", "+", "*", "~"]
+    },
+    {
+      "id": "emerald_kelp",
+      "name": "Emerald Kelp",
+      "hexColors": ["#2EC4B6", "#06D6A0", "#118AB2", "#B5E48C"],
+      "asciiSymbols": ["$", "&", "!", "^"]
+    },
+    {
+      "id": "abyssal_neon",
+      "name": "Abyssal Neon",
+      "hexColors": ["#00F5D4", "#9B5DE5", "#F15BB5", "#FEE440"],
+      "asciiSymbols": ["=", ":", "+", "o"]
+    }
+  ],
+  "shopItems": [
+    {
+      "id": "common_fish",
+      "name": "Peste Comun",
+      "category": "fish",
+      "price": 0,
+      "passiveIncome": 6,
+      "minWidth": 6,
+      "minHeight": 4,
+      "requiredLevel": 1,
+      "unlocked": false
+    },
+    {
+      "id": "seagrass",
+      "name": "Alga Marina",
+      "category": "decoration",
+      "price": 25,
+      "passiveIncome": 0,
+      "minWidth": 4,
+      "minHeight": 4,
+      "requiredLevel": 1,
+      "unlocked": false
+    },
+    {
+      "id": "exotic_fish",
+      "name": "Peste Exotic",
+      "category": "fish",
+      "price": 45,
+      "passiveIncome": 18,
+      "minWidth": 6,
+      "minHeight": 4,
+      "requiredLevel": 1,
+      "unlocked": false
+    },
+    {
+      "id": "cleaner_shrimp",
+      "name": "Crevete Curatator",
+      "category": "cleaner",
+      "price": 40,
+      "passiveIncome": 4,
+      "minWidth": 5,
+      "minHeight": 3,
+      "requiredLevel": 2,
+      "unlocked": false
+    }
+  ]
+}
